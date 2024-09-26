@@ -18,14 +18,20 @@ import (
 	"fmt"
 	"net/http"
 	"os"
-
-	"github.com/helloworlddan/tortune/tortune"
+	"github.com/helloworlddan/tortuneai/tortuneai"
 )
 
 func main() {
 	// Handle requests to "/" by responding with a random joke from the tortune lib.
 	http.HandleFunc("/", func(w http.ResponseWriter, _ *http.Request) {
-		fmt.Fprint(w, tortune.HitMe())
+		joke, err := tortuneai.HitMe("Tell me a dad joke", "summit-hol24zrh-5712")
+
+		if err != nil {
+			fmt.Fprint(w, "error: %v\n", err)
+			return
+		}
+
+		fmt.Fprint(w, joke)
 	})
 
 	// Listen on incoming TCP requests to $PORT or default to 8080.
